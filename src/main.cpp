@@ -1,11 +1,29 @@
 #include <Arduino.h>
-//hola pol 
-// put function declarations here:
-int myFunction(int, int);
+#include <SPI.h>
+#include <SD.h>
+
+File myFile;
 
 void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+  Serial.begin(9600);
+  Serial.print("Iniciando SD ...");
+  if(!SD.begin(4)){
+    Serial.println("No se pudo inicializar");
+    return;
+  }
+
+  Serial.println("inicializacion exitosa");
+
+  myFile = SD.open("archivo.txt");//abrimos el archivo
+  if (myFile) {
+    Serial.println("archivo.txt:");
+    while (myFile.available()) {
+      Serial.write(myFile.read());
+    }
+    myFile.close(); //cerramos el archivo
+  } else {
+    Serial.println("Error al abrir el archivo");
+  }
 }
 
 void loop() {
